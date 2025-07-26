@@ -1,68 +1,124 @@
+/* Import Poppins font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+/* Import Tailwind CSS v4 */
+@import "tailwindcss";
+
+/* Custom CSS variables */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --font-display: "Poppins", sans-serif;
+  --font-sans: "Poppins", system-ui, sans-serif;
+  --color-primary: #05B6D3;
+  --color-primary-50: #f0fdff;
+  --color-primary-100: #ccf7fe;
+  --color-primary-200: #99effd;
+  --color-primary-300: #60e2fa;
+  --color-primary-400: #22ccf1;
+  --color-primary-500: #05B6D3;
+  --color-primary-600: #0891b2;
+  --color-primary-700: #0e7490;
+  --color-primary-800: #155e75;
+  --color-primary-900: #164e63;
+  --color-secondary: #EF863E;
+  --color-secondary-50: #fef7ed;
+  --color-secondary-100: #feedc7;
+  --color-secondary-200: #fed7aa;
+  --color-secondary-300: #fdba74;
+  --color-secondary-400: #fb923c;
+  --color-secondary-500: #EF863E;
+  --color-secondary-600: #ea580c;
+  --color-secondary-700: #c2410c;
+  --color-secondary-800: #9a3412;
+  --color-secondary-900: #7c2d12;
+}
+
+/* Base styles */
+html {
+  font-family: var(--font-sans);
   line-height: 1.5;
   font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
 }
 
+
+/* Scrollbar styles */
+.scrollbar::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background-color: #057c8e;
+  border-radius: 3px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background-color: rgb(172, 201, 229);
+}
+
+/* Datepicker styles */
+.rdp-root {
+  --rdp-accent-color: #01b0cb;
+  --rdp-accent-background-color: #dffbff;
+  --rdp-day_button-border-radius: 8px;
+  --rdp-selected-font: bold medium var(--font-sans);
+}
+
+/* Component styles using Tailwind v4 utilities */
+.input-box {
+  @apply w-full text-sm bg-[rgba(8,145,178,0.05)] rounded px-5 py-3 mb-4 outline-none;
+}
+
+.btn-primary {
+  @apply w-full text-sm font-medium text-white bg-[var(--color-primary-500)] shadow-[0_4px_6px_-1px_rgba(8,145,178,0.5)] py-2.5 rounded-full my-1 hover:bg-[var(--color-primary-100)] hover:text-[var(--color-primary-500)];
+}
+
+.btn-light {
+  @apply bg-[var(--color-primary-50)] text-[var(--color-primary-500)] border border-[var(--color-primary-100)] hover:bg-[var(--color-primary-500)] hover:text-white;
+}
+
+.login-ui-box {
+  @apply w-80 h-[450px] rounded-full bg-[var(--color-primary-500)] absolute rotate-45;
+}
+
+.icon-btn {
+  @apply text-[22px] text-slate-300 cursor-pointer hover:text-red-500;
+}
+
+.btn-small {
+  @apply flex items-center gap-1 text-xs font-medium bg-[var(--color-primary-50)] text-[var(--color-primary-500)] border border-[var(--color-primary-100)] hover:bg-[var(--color-primary-500)] hover:text-white rounded px-3 py-[3px];
+}
+
+.btn-delete {
+  @apply bg-rose-50 text-rose-500 border border-rose-100 hover:bg-rose-500 hover:text-white;
+}
+
+.model-box {
+  @apply w-[80vw] md:w-[40%] h-[80vh] bg-white rounded-lg mx-auto mt-14 p-5 overflow-y-scroll z-50;
+}
+
+.input-label {
+  @apply text-xs text-slate-400;
+}
+
+/* Link styles */
 a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+  @apply font-medium text-[#646cff] no-underline hover:text-[#535bf2];
 }
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
+/* Light theme adjustments */
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
     background-color: #ffffff;
   }
   a:hover {
-    color: #747bff;
+    @apply text-[#747bff];
   }
   button {
-    background-color: #f9f9f9;
+    @apply bg-[#f9f9f9];
   }
 }
