@@ -93,12 +93,18 @@ html {
 }
 
 .btn-delete {
-  @apply bg-rose-50 text-rose-500 border border-rose-100 hover:bg-rose-500 hover:text-white;
+  @apply text-sm font-medium bg-rose-50 text-rose-500 border border-rose-100 
+         hover:bg-rose-500 hover:text-white py-2.5 px-6 rounded-full my-1;
 }
 
+
 .model-box {
-  @apply w-[80vw] md:w-[40%] h-[80vh] bg-white rounded-lg mx-auto mt-14 p-5 overflow-y-scroll z-50;
+  @apply fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
+         max-w-3xl w-[90%] max-h-[90vh] overflow-y-auto 
+         bg-white rounded-xl shadow-xl p-6 z-50;
 }
+
+
 
 .input-label {
   @apply text-xs text-slate-400;

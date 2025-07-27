@@ -2,15 +2,15 @@ import React from "react";
 import { FaHeart } from "react-icons/fa6";
 import { GrMapLocation } from "react-icons/gr";
 import moment from "moment";
-
+import { IoClose } from "react-icons/io5";
 const ViewTravelStory = ({ storyInfo, onClose, onEditClick, onDeleteClick }) => {
     if (!storyInfo) return null;
     const { imageUrl, title, story, visitedLocation, visitedDate, isFavourite } = storyInfo;
 
     return (
         <div className="relative max-w-xl mx-auto bg-white rounded-lg shadow-lg p-6">
-            <button className="absolute top-4 right-4 text-xl" onClick={onClose}>
-                ✕
+            <button className="absolute top-2 right-2 text-2xl text-gray-500 hover:text-red-500" onClick={onClose}>
+                <IoClose />
             </button>
             <div className="flex flex-col items-center">
                 <img
@@ -35,9 +35,9 @@ const ViewTravelStory = ({ storyInfo, onClose, onEditClick, onDeleteClick }) => 
                 <div className="text-slate-700 text-base mb-6 whitespace-pre-line">
                     {story}
                 </div>
-                
+
                 <div className="flex gap-4">
-                    <button className="btn-primary" onClick={onEditClick}>
+                    <button className="btn-primary !px-8" onClick={onEditClick}>
                         Edit
                     </button>
                     <button className="btn-delete" onClick={onDeleteClick}>

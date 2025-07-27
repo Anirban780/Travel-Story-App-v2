@@ -78,8 +78,6 @@ const Login = () => {
               type="button"
               className="w-full mb-4 text-sm md:text-base font-medium text-[#3c4043] bg-white border border-[#dadce0] rounded-full py-2.5 px-4 flex items-center justify-center gap-3 shadow-sm hover:shadow-lg hover:bg-[#f8f9fa] hover:text-black active:scale-95 transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#4285f4]"
               onClick={handleGoogleSignIn}
-
-
             >
               <svg
                 width="20"

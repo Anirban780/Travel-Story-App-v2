@@ -4,6 +4,8 @@ import Login from './components/Auth/Login';
 import SignUp from './components/Auth/Signup';
 import Home from './pages/Home';
 import Loader from './components/Loader';
+import Profile from './pages/Profile';
+import TravelLandingPage from './pages/LandingPage';
 
 const App = () => {
   const { user, loading } = useAuth();
@@ -16,6 +18,7 @@ const App = () => {
         <Route path="/dashboard" element={user ? <Home /> : <Navigate to="/login" />} />
         <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
         <Route path="/signup" element={!user ? <SignUp /> : <Navigate to="/dashboard" />} />
+        <Route path='/profile' element={<Profile />} />
       </Routes>
     </Router>
   );

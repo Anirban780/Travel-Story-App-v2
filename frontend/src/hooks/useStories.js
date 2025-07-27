@@ -3,9 +3,11 @@ import { getStories, addStory, updateStory, deleteStory } from "../services/db";
 
 export default function useStories(userId) {
   const [stories, setStories] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const fetchStories = async (userId) => {
+    if(!userId) return;
+    
     setLoading(true);
     const data = await getStories(userId);
     setStories(data);

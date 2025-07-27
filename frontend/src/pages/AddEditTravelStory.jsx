@@ -1,15 +1,12 @@
 import React, { useState } from 'react';
-import { uploadImage } from '../../api/cloudinary';
-import { addStory, updateStory } from '../../api/db';
-import DateSelector from '../../components/Input/DateSelector';
-import TagInput from '../../components/Input/TagInput';
-import ImageSelector from '../../components/Input/ImageSelector';
+import { uploadImage } from '../services/cloudinary';
+import { addStory, updateStory } from '../services/db';
 import { toast } from 'react-toastify';
 import AddPost from '../components/AddPost';
 
 const AddEditTravelStory = ({
-  storyInfo,
   type,
+  storyInfo,
   onClose,
   fetchStories,
   userId
