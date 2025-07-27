@@ -15,7 +15,7 @@ export default function useStories(userId) {
   };
 
   useEffect(() => {
-    if (userId) fetchStories();
+    if (userId) fetchStories(userId);
   }, [userId]);
 
   return { stories, loading, fetchStories, addStory, updateStory, deleteStory };

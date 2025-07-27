@@ -4,25 +4,25 @@ import {
   MdAdd,
   MdFavorite,
   MdEdit,
-  MdLocationOn,
   MdTrendingUp,
+  MdDelete,
 } from "react-icons/md";
 
 const activityIcons = {
   add: MdAdd,
   favorite: MdFavorite,
   edit: MdEdit,
-  location: MdLocationOn,
+  delete: MdDelete,
 };
 
-const RecentActivityCard = ({ stories = [], type = "add", maxItems = 3, onSeeAll }) => {
+const RecentActivityCard = ({ stories = [], maxItems = 3, onSeeAll }) => {
   // Fallback to "add" icon if unknown
-  const ActivityIcon = activityIcons[type] || MdAdd;
+
 
   // Safely sort stories by date (descending)
   const sortedStories = [...stories]
-    .filter(story => !!story.visitedDate)
-    .sort((a, b) => b.visitedDate - a.visitedDate)
+    .filter(story => !!story.createdAt)
+    .sort((a, b) => b.createdAt - a.createdAt)
     .slice(0, maxItems);
 
   return (
@@ -34,27 +34,32 @@ const RecentActivityCard = ({ stories = [], type = "add", maxItems = 3, onSeeAll
 
       <div className="space-y-4 max-h-72 overflow-y-auto pr-2">
         {sortedStories.length > 0 ? (
-          sortedStories.map((story, index) => (
-            <div
-              key={`${story.id}-${index}`}
-              className="flex items-start gap-3 p-3 bg-slate-50 rounded-lg"
-            >
-              <div className="w-8 h-8 bg-gradient-to-r from-cyan-400 to-blue-400 rounded-full flex items-center justify-center flex-shrink-0">
-                <ActivityIcon className="text-white text-sm" />
-              </div>
+          sortedStories.map((story, index) => {
+            const ActivityIcon = activityIcons[story.type] || MdAdd;
 
-              <div className="flex-1">
-                <p className="text-sm font-medium text-slate-700 break-words">
-                  {story.title}
-                </p>
-                <p className="text-xs text-slate-500">
-                  {story.visitedDate
-                    ? moment(story.visitedDate).fromNow()
-                    : "Date unknown"}
-                </p>
+            return (
+              <div
+                key={`${story.storyId || story.id}-${index}`}
+                className="flex items-start gap-3 p-3 bg-slate-50 rounded-lg"
+              >
+                <div className="w-8 h-8 bg-gradient-to-r from-cyan-400 to-blue-400 rounded-full flex items-center justify-center flex-shrink-0">
+                  <ActivityIcon className="text-white text-sm" />
+                </div>
+
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-slate-700 break-words">
+                    {story.storyTitle || "Untitled Story"}
+                  </p>
+
+                  <p className="text-xs text-slate-500">
+                    {story.createdAt && story.createdAt.toDate
+                      ? moment(story.createdAt.toDate()).fromNow()
+                      : "Date unknown"}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))
+            );
+          })
         ) : (
           <p className="text-sm text-slate-500 text-center py-4">
             No recent activity

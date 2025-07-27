@@ -50,17 +50,19 @@ const AddEditTravelStory = ({
       if (type === "add") {
         await addStory(storyData, userId);
         toast.success("Story Added Successfully");
+
       } else {
         await updateStory(storyInfo.id, storyData, userId);
         toast.success("Story Updated Successfully");
       }
-      fetchStories();
+
+      await fetchStories(); // Keep this as fallback
       onClose();
     } catch (err) {
       setError("Failed to save story. Please try again.", err);
-    } finally {
-      setLoading(false);
+      console.error(err);
     }
+
   };
 
   return (
@@ -69,9 +71,9 @@ const AddEditTravelStory = ({
         <h5 className='text-xl font-medium text-slate-700'>
           {type === "add" ? "Add Story" : "Update Story"}
         </h5>
-        
+
         <button className='' onClick={onClose}>✕</button>
-        
+
       </div>
 
       <AddPost
@@ -82,7 +84,7 @@ const AddEditTravelStory = ({
         visitedDate={visitedDate} setVisitedDate={setVisitedDate}
         error={error}
       />
-      
+
       <button className='btn-primary mt-4 w-full' onClick={handleAddOrUpdateClick} disabled={loading}>
         {loading ? (type === "add" ? "Adding..." : "Updating...") : (type === "add" ? "Add Story" : "Update Story")}
       </button>

@@ -17,12 +17,13 @@ import Modal from "react-modal";
 import AddEditTravelStory from "./AddEditTravelStory";
 import ViewTravelStory from "./ViewTravelStory";
 import Loader from "./../components/Loader";
-import { addUserActivity } from "../services/db";
+import { addUserActivity, getRecentActivities } from "../services/db";
 
 
 const Home = () => {
   const { user } = useAuth();
   const { stories, loading, fetchStories, updateStory, deleteStory } = useStories(user?.uid);
+  const [activities, setActivities] = useState([]);
   const navigate = useNavigate();
 
 
@@ -39,6 +40,23 @@ const Home = () => {
       fetchStories(user.uid);
     }
   }, [user?.uid]);
+
+  useEffect(() => {
+    const fetchActivity = async () => {
+      if (user?.uid) {
+        try {
+          const data = await getRecentActivities(user.uid);
+          console.log("Fetched activity:", data);
+          setActivities(data);
+        } catch (err) {
+          console.error("Failed to fetch activity:", err);
+        }
+      }
+    };
+
+    fetchActivity();
+  }, [user?.uid]);
+
 
   // Filter and sort stories
   const filteredAndSortedStories = React.useMemo(() => {
@@ -195,7 +213,7 @@ const Home = () => {
             {filteredAndSortedStories.length > 0 ? (
               <div className={`${viewMode === 'grid'
                 ? 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8'
-                : 'flex flex-col gap-4 max-w-3xl mx-8 w-full'
+                : 'flex flex-col gap-4 max-w-3xl mx-auto w-full'
                 }`}>
                 {filteredAndSortedStories.map((story) => (
                   <TravelStoryCard
@@ -227,7 +245,7 @@ const Home = () => {
           {/* Sidebar */}
           <div className="w-full lg:w-80 space-y-6">
             {/* Recent Activity */}
-            <RecentActivityCard stories={stories} onSeeAll={() => navigate("/activity")} />
+            <RecentActivityCard stories={activities} onSeeAll={() => navigate("/activity")} />
 
             {/* Quick Actions */}
             <QuickActionsCard setOpenAddEditModal={setOpenAddEditModal} />
