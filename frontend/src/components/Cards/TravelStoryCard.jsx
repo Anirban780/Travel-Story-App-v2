@@ -15,6 +15,7 @@ const TravelStoryCard = ({
   readTime = 5,
   onFavouriteClick,
   onClick,
+  viewMode,
 }) => {
    return (
     <div className="group cursor-pointer transform transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl">
@@ -23,7 +24,7 @@ const TravelStoryCard = ({
           <img
             src={imageUrl}
             alt={title}
-            className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+            className={`w-full ${viewMode === 'grid' ? 'h-64' : 'h-90'} object-cover group-hover:scale-110 transition-transform duration-500`}
             onClick={onClick}
           />
           

@@ -48,10 +48,10 @@ const AddEditTravelStory = ({
 
     try {
       if (type === "add") {
-        await addStory(storyData);
+        await addStory(storyData, userId);
         toast.success("Story Added Successfully");
       } else {
-        await updateStory(storyInfo.id, storyData);
+        await updateStory(storyInfo.id, storyData, userId);
         toast.success("Story Updated Successfully");
       }
       fetchStories();

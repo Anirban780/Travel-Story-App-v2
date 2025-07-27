@@ -15,3 +15,4 @@ export const logout = () =>
 
 export const subscribeToAuth = (callback) => 
     onAuthStateChanged(auth, callback);
+

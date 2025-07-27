@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import TravelStoryCard from "../components/Cards/TravelStoryCard";
@@ -16,6 +17,7 @@ import Modal from "react-modal";
 import AddEditTravelStory from "./AddEditTravelStory";
 import ViewTravelStory from "./ViewTravelStory";
 import Loader from "./../components/Loader";
+import { addUserActivity } from "../services/db";
 
 
 const Home = () => {
@@ -36,7 +38,7 @@ const Home = () => {
     if (user?.uid) {
       fetchStories(user.uid);
     }
-  }, [user?.uid, fetchStories]);
+  }, [user?.uid]);
 
   // Filter and sort stories
   const filteredAndSortedStories = React.useMemo(() => {
@@ -103,13 +105,26 @@ const Home = () => {
   const handleEdit = (data) => setOpenAddEditModal({ isShown: true, type: "edit", data });
   const handleViewStory = (data) => setOpenViewModal({ isShown: true, data });
 
+  // handling favorite toggling with database
   const toggleFavourite = async (story) => {
+    const isNowFavourite = !story.isFavourite;
+
     try {
-      await updateStory(story.id, { ...story, isFavourite: !story.isFavourite });
+      // Update the story's favourite status
+      await updateStory(story.id, { ...story, isFavourite: isNowFavourite });
+
+      // Add activity
+      await addUserActivity(user.uid, {
+        type: isNowFavourite ? "favourite" : "unfavourite",
+        storyId: story.id,
+        storyTitle: story.title || "Untitled Story",
+      });
+
       await fetchStories(user.uid);
-      toast.success(story.isFavourite ? 'Removed from favorites' : 'Added to favorites');
+      toast.success(isNowFavourite ? "Added to favorites" : "Removed from favorites");
     } catch (error) {
-      toast.error('Failed to update favorite status', error);
+      toast.error("Failed to update favorite status");
+      console.error(error);
     }
   };
 
@@ -180,7 +195,7 @@ const Home = () => {
             {filteredAndSortedStories.length > 0 ? (
               <div className={`${viewMode === 'grid'
                 ? 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8'
-                : 'flex flex-col gap-6'
+                : 'flex flex-col gap-4 max-w-3xl mx-8 w-full'
                 }`}>
                 {filteredAndSortedStories.map((story) => (
                   <TravelStoryCard
@@ -197,6 +212,7 @@ const Home = () => {
                     onEdit={() => handleEdit(story)}
                     onClick={() => handleViewStory(story)}
                     onFavouriteClick={() => toggleFavourite(story)}
+                    viewMode={viewMode}
                   />
                 ))}
               </div>
@@ -211,7 +227,7 @@ const Home = () => {
           {/* Sidebar */}
           <div className="w-full lg:w-80 space-y-6">
             {/* Recent Activity */}
-            <RecentActivityCard stories={stories} />
+            <RecentActivityCard stories={stories} onSeeAll={() => navigate("/activity")} />
 
             {/* Quick Actions */}
             <QuickActionsCard setOpenAddEditModal={setOpenAddEditModal} />
@@ -275,7 +291,7 @@ const Home = () => {
           }}
           onDeleteClick={async () => {
             try {
-              await deleteStory(openViewModal.data.id);
+              await deleteStory(openViewModal.data.id, user.uid, openViewModal.data.title);
               setOpenViewModal((prev) => ({ ...prev, isShown: false }));
               await fetchStories(user.uid);
               toast.success('Story deleted successfully');

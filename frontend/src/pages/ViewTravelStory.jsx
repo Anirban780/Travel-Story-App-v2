@@ -3,6 +3,8 @@ import { FaHeart } from "react-icons/fa6";
 import { GrMapLocation } from "react-icons/gr";
 import moment from "moment";
 import { IoClose } from "react-icons/io5";
+
+
 const ViewTravelStory = ({ storyInfo, onClose, onEditClick, onDeleteClick }) => {
     if (!storyInfo) return null;
     const { imageUrl, title, story, visitedLocation, visitedDate, isFavourite } = storyInfo;
