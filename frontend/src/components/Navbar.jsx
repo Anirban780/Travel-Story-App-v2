@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { MdExplore, MdSearch } from "react-icons/md";
+import ProfileDropdown from "./ProfileDropdown";
 
-const Navbar = ({ userInfo, onLogout }) => {
+const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState("");
   
   return (
@@ -34,31 +35,8 @@ const Navbar = ({ userInfo, onLogout }) => {
         </div>
       </div>
 
-      <div className="flex items-center gap-4">
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2">
-            <div className='w-10 h-10 flex items-center justify-center rounded-full text-slate-950 font-medium bg-gradient-to-r from-cyan-100 to-blue-100 border-2 border-cyan-200'>
-              {userInfo?.displayName ? 
-                userInfo.displayName.charAt(0).toUpperCase() : 
-                userInfo?.email?.charAt(0).toUpperCase()
-              }
-            </div>
-            <div className="hidden sm:block">
-              <p className='text-sm font-semibold text-slate-700'>
-                {userInfo?.displayName || userInfo?.email?.split('@')[0]}
-              </p>
-              <p className='text-xs text-slate-500'>Storyteller</p>
-            </div>
-          </div>
-          <button
-            onClick={onLogout}
-            className="relative inline-flex items-center justify-center px-4 py-2 overflow-hidden font-medium tracking-tighter text-white bg-gradient-to-r from-slate-600 to-slate-700 rounded-lg group hover:from-red-500 hover:to-red-600 transition-all duration-300"
-          >
-            <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-red-500 rounded-full group-hover:w-56 group-hover:h-56"></span>
-            <span className="relative text-sm">Logout</span>
-          </button>
-        </div>
-      </div>
+      
+      <ProfileDropdown />
     </div>
   );
 };

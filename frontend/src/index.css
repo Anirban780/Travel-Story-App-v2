@@ -132,6 +132,7 @@ html {
   margin-bottom: 1rem;
   outline: none;
   transition: all 0.3s ease;
+  color: black;
 }
 
 .input-box::placeholder {
@@ -465,7 +466,9 @@ html {
 
 /* Link styles */
 a {
-  @apply font-medium text-[#646cff] no-underline hover:text-[#535bf2];
+  @apply font-medium text-[#646cff] transition-all duration-500 ease-in-out;
+  @apply border border-transparent px-2 py-2 rounded-full;
+  @apply hover:text-[#535bf2] hover:bg-white hover:border-[#535bf2] hover:translate-x-[2px] hover:translate-y-[-2px];
 }
 
 /* Responsive adjustments */
@@ -482,7 +485,7 @@ a {
 }
 
 /* Dark mode support */
-@media (prefers-color-scheme: dark) {
+/*@media (prefers-color-scheme: dark) {
   .input-box {
     background-color: rgb(30 41 59);
     border-color: rgb(51 65 85);
@@ -515,7 +518,7 @@ a {
     background-color: rgb(51 65 85);
     border-color: rgb(71 85 105);
   }
-}
+}*/
 
 /* Light theme adjustments */
 /*@media (prefers-color-scheme: light) {

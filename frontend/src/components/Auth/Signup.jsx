@@ -49,7 +49,7 @@ const Signup = () => {
       await updateProfile(userCredential.user, { displayName: name });
       await createUserIfNotExists(user);
 
-      navigate("/dashboard");
+      navigate("/home");
     } catch (err) {
       setError(err.message);
     }

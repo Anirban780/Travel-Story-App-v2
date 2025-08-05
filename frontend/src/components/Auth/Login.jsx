@@ -37,7 +37,7 @@ const Login = () => {
       const user = result.user;
 
       await createUserIfNotExists(user);
-      navigate('/dashboard');
+      navigate('/home');
     } catch (error) {
       setError(error.message);
     } finally {

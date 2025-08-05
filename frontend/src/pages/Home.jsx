@@ -12,7 +12,6 @@ import { toast } from "react-toastify";
 import useStories from "./../hooks/useStories";
 import useAuth from "./../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
-import { logout } from "../services/auth";
 import Modal from "react-modal";
 import AddEditTravelStory from "./AddEditTravelStory";
 import ViewTravelStory from "./ViewTravelStory";
@@ -146,14 +145,7 @@ const Home = () => {
     }
   };
 
-  const onLogout = async () => {
-    try {
-      await logout();
-      navigate("/login");
-    } catch (error) {
-      toast.error('Failed to logout', error);
-    }
-  };
+  
 
   // Calculate stats
   const totalStories = stories.length;
@@ -168,7 +160,7 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-cyan-50 to-blue-50">
       {/* Enhanced Navbar */}
-      <Navbar userInfo={user} onLogout={onLogout} />
+      <Navbar />
 
       {/* Background Decorations */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
