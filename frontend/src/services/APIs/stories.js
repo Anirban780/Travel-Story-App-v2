@@ -1,6 +1,6 @@
 import { getIdToken } from "../auth"; // path to your token util
 
-const API_BASE = import.meta.env.VITE_BACKEND_URL;
+const API_BASE = import.meta.env.VITE_BACKEND_PROD_URL || import.meta.env.VITE_BACKEND_URL;
 
 export const addStory = async (story) => {
   const token = await getIdToken();
