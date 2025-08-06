@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
+import { useAuth } from "../context/AuthContext";
 import { logout } from "../services/auth";
 import { FaUserCircle } from "react-icons/fa";
 import { toast } from "react-toastify";

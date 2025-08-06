@@ -10,7 +10,7 @@ import QuickActionsCard from "../components/Cards/QuickActionsCard";
 import { MdAdd } from "react-icons/md";
 import { toast } from "react-toastify";
 import useStories from "./../hooks/useStories";
-import useAuth from "./../hooks/useAuth";
+import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 import AddEditTravelStory from "./AddEditTravelStory";

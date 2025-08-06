@@ -59,7 +59,7 @@ const Login = () => {
 
       //console.log(user);
 
-      navigate('/dashboard');
+      navigate('/');
     } catch (err) {
       if (err.code === 'auth/account-exists-with-different-credential') {
         setError('An account already exists with this email. Please sign in with the existing provider.');

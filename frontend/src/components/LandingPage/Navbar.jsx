@@ -2,13 +2,13 @@ import React from 'react'
 import { MdTravelExplore } from 'react-icons/md'
 import { checkCurrentUser } from '../../services/auth'
 import { Link, useNavigate } from 'react-router-dom';
-import useAuth from '../../hooks/useAuth';
+import { useAuth } from '../../context/AuthContext';
 import ProfileDropdown from '../ProfileDropdown';
 
 
 const Navbar = () => {
     const navigate = useNavigate();
-    const user = useAuth();
+    const { user } = useAuth();
 
     const handleJoinClick = () => {
         const user = checkCurrentUser();
