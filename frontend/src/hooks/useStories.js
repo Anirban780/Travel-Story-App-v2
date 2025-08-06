@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getStories, addStory, updateStory, deleteStory } from "../services/db";
+import { getStories, addStory, updateStory, deleteStory } from "../services/APIs/stories";
 
 export default function useStories(userId) {
   const [stories, setStories] = useState([]);

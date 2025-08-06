@@ -20,6 +20,12 @@ export const subscribeToAuth = (callback) =>
 
 export const checkCurrentUser = () => auth.currentUser;
 
+export const getIdToken = async () => {
+  const user = auth.currentUser;
+  if (!user) throw new Error("User not logged in");
+  return await user.getIdToken();
+};
+
 export const useCheckAuthAndRedirect = () => {
   const navigate = useNavigate();
 

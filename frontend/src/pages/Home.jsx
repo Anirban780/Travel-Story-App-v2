@@ -16,12 +16,12 @@ import Modal from "react-modal";
 import AddEditTravelStory from "./AddEditTravelStory";
 import ViewTravelStory from "./ViewTravelStory";
 import Loader from "./../components/Loader";
-import { addUserActivity, getRecentActivities } from "../services/db";
-
+import { getUserActivity } from "../services/APIs/users";
+import { toggleFavourite } from "../services/APIs/stories";
 
 const Home = () => {
   const { user } = useAuth();
-  const { stories, loading, fetchStories, updateStory, deleteStory } = useStories(user?.uid);
+  const { stories, loading, fetchStories, deleteStory } = useStories(user?.uid);
   const [activities, setActivities] = useState([]);
   const navigate = useNavigate();
 
@@ -44,7 +44,7 @@ const Home = () => {
     const fetchActivity = async () => {
       if (user?.uid) {
         try {
-          const data = await getRecentActivities(user.uid);
+          const data = await getUserActivity(user.uid);
           console.log("Fetched activity:", data);
           setActivities(data);
         } catch (err) {
@@ -122,30 +122,6 @@ const Home = () => {
   const handleEdit = (data) => setOpenAddEditModal({ isShown: true, type: "edit", data });
   const handleViewStory = (data) => setOpenViewModal({ isShown: true, data });
 
-  // handling favorite toggling with database
-  const toggleFavourite = async (story) => {
-    const isNowFavourite = !story.isFavourite;
-
-    try {
-      // Update the story's favourite status
-      await updateStory(story.id, { ...story, isFavourite: isNowFavourite });
-
-      // Add activity
-      await addUserActivity(user.uid, {
-        type: isNowFavourite ? "favourite" : "unfavourite",
-        storyId: story.id,
-        storyTitle: story.title || "Untitled Story",
-      });
-
-      await fetchStories(user.uid);
-      toast.success(isNowFavourite ? "Added to favorites" : "Removed from favorites");
-    } catch (error) {
-      toast.error("Failed to update favorite status");
-      console.error(error);
-    }
-  };
-
-  
 
   // Calculate stats
   const totalStories = stories.length;

@@ -1,117 +1,103 @@
-const multer = require("multer");
-const cloudinary = require("../config/cloudinary");
-const { db } = require("../config/firebase");
+const storyModel = require("../models/storyModel");
+const { addUserActivity } = require("../models/userModel");
 
-const storage = multer.memoryStorage();
-const upload = multer({ storage });
+const addStory = async (req, res) => {
+  const { story, userId } = req.body;
 
-// Add a story with image
-const addStory = [
-  upload.single("image"),
-  async (req, res) => {
-    const { title, story, visitedLocation, visitedDate } = req.body;
-    const userId = req.user.uid;
-
-    try {
-      if (!req.file) return res.status(400).json({ error: "Image required" });
-
-      const cloudinaryResult = await uploadToCloudinary(req.file.buffer);
-
-      const newStory = {
-        title,
-        story,
-        visitedLocation,
-        imageUrl: cloudinaryResult.secure_url,
-        visitedDate: new Date(visitedDate),
-        userId,
-        createdAt: new Date(),
-      };
-
-      const doc = await db.collection("travel_stories").add(newStory);
-      res.status(201).json({ id: doc.id, ...newStory });
-
-    } catch (err) {
-      res.status(500).json({ error: err.message });
+  try {
+    const exists = await storyModel.findStoryByTitle(userId, story.title);
+    if (!exists.empty) {
+      return res.status(400).json({ error: "Story with this title already exists." });
     }
-  },
-];
 
-// Get user’s stories
-const getUserStories = async (req, res) => {
-  const userId = req.user.uid;
-  try {
-    const snapshot = await db.collection("travel_stories")
-      .where("userId", "==", userId)
-      .orderBy("createdAt", "desc")
-      .get();
+    const storyRef = await storyModel.addStory({ ...story, userId });
 
-    const stories = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    res.json(stories);
+    await addUserActivity(userId, {
+      type: "add",
+      storyId: storyRef.id,
+      storyTitle: story.title,
+    });
 
+    res.status(201).json({ id: storyRef.id, ...story });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// Get story by ID
-const getStoryById = async (req, res) => {
-  const { id } = req.params;
-
+const getStories = async (req, res) => {
+  const { userId } = req.params;
   try {
-    const doc = await db.collection("travel_stories").doc(id).get();
-    if (!doc.exists) return res.status(404).json({ error: "Not found" });
-    res.json({ id: doc.id, ...doc.data() });
-
+    const stories = await storyModel.getUserStories(userId);
+    res.status(200).json(stories);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// Update story
 const updateStory = async (req, res) => {
-  const { id } = req.params;
-  const userId = req.user.uid;
-  const { title, story, visitedLocation, visitedDate } = req.body;
+  const { storyId } = req.params;
+  const { updatedData, userId } = req.body;
 
   try {
-    const docRef = db.collection("travel_stories").doc(id);
-    const doc = await docRef.get();
-    if (!doc.exists || doc.data().userId !== userId) {
-      return res.status(403).json({ error: "Unauthorized" });
-    }
+    await storyModel.updateStoryById(storyId, updatedData);
 
-    await docRef.update({ title, story, visitedLocation, visitedDate });
-    res.json({ message: "Story updated" });
+    await addUserActivity(userId, {
+      type: "edit",
+      storyId,
+      storyTitle: updatedData.title,
+    });
 
+    res.status(200).json({ success: true });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// Delete story
 const deleteStory = async (req, res) => {
   const { id } = req.params;
-  const userId = req.user.uid;
+  const { userId, storyTitle = "Untitled" } = req.body;
 
   try {
-    const docRef = db.collection("travel_stories").doc(id);
-    const doc = await docRef.get();
-    if (!doc.exists || doc.data().userId !== userId) {
-      return res.status(403).json({ error: "Unauthorized" });
-    }
+    await storyModel.deleteStoryById(id);
 
-    await docRef.delete();
-    res.json({ message: "Story deleted" });
-    
+    await addUserActivity(userId, {
+      type: "delete",
+      storyId: id,
+      storyTitle,
+    });
+
+    res.status(200).json({ success: true });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-module.exports = {
-  addStory,
-  getUserStories,
-  getStoryById,
-  updateStory,
-  deleteStory,
+
+const toggleFavourite = async (req, res) => {
+  const { storyId } = req.params;
+  const { userId, isFavourite, title } = req.body;
+
+  try {
+    await storyModel.updateFavouriteStatus(storyId, isFavourite);
+
+    await addUserActivity(userId, {
+      type: isFavourite ? "favourite" : "unfavourite",
+      storyId,
+      storyTitle: title || "Untitled Story",
+    });
+
+    res.status(200).json({
+      success: true,
+      message: `Story ${isFavourite ? "added to" : "removed from"} favourites.`,
+    });
+  } catch (err) {
+    console.error("Error toggling favourite:", err);
+    res.status(500).json({ error: "Failed to toggle favourite." });
+  }
 };
+
+
+module.exports = {
+  addStory, updateStory, getStories, deleteStory, toggleFavourite
+}
+

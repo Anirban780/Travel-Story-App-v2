@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { uploadImage } from '../services/cloudinary';
-import { addStory, updateStory } from '../services/db';
+import { addStory, updateStory } from '../services/APIs/stories';
 import { toast } from 'react-toastify';
 import AddPost from '../components/AddPost';
 
