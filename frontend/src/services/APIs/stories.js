@@ -17,7 +17,7 @@ export const addStory = async (story) => {
   return await res.json();
 };
 
-export const getUserStories = async (userId) => {
+export const getStories = async (userId) => {
   const token = await getIdToken();
   const res = await fetch(`${API_BASE}/stories/${userId}`, {
     headers: {
