@@ -17,11 +17,10 @@ import AddEditTravelStory from "./AddEditTravelStory";
 import ViewTravelStory from "./ViewTravelStory";
 import Loader from "./../components/Loader";
 import { getUserActivity } from "../services/APIs/users";
-import { toggleFavourite } from "../services/APIs/stories";
 
 const Home = () => {
   const { user } = useAuth();
-  const { stories, loading, fetchStories, deleteStory } = useStories(user?.uid);
+  const { stories, loading, fetchStories, deleteStory, toggleStoryFavourite } = useStories(user?.uid);
   const [activities, setActivities] = useState([]);
   const navigate = useNavigate();
 
@@ -128,6 +127,14 @@ const Home = () => {
   const totalLocations = [...new Set(stories.flatMap(s => s.visitedLocation))].length;
   const totalFavorites = stories.filter(s => s.isFavourite).length;
 
+  const handleToggleFavourite = async (story) => {
+    try {
+      await toggleStoryFavourite(story);
+    } catch (error) {
+      toast.error('Failed to update favourite', error);
+    }
+  };
+
   // Loading state
   if (loading) {
     return <Loader />
@@ -197,7 +204,7 @@ const Home = () => {
                     readTime={Math.ceil(story.story?.length / 200) || 5}
                     onEdit={() => handleEdit(story)}
                     onClick={() => handleViewStory(story)}
-                    onFavouriteClick={() => toggleFavourite(story)}
+                    onFavouriteClick={() => handleToggleFavourite(story)}
                     viewMode={viewMode}
                   />
                 ))}

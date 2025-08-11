@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getStories, addStory, updateStory, deleteStory } from "../services/APIs/stories";
+import { getStories, addStory, updateStory, deleteStory, toggleFavourite } from "../services/APIs/stories";
 
 export default function useStories(userId) {
   const [stories, setStories] = useState([]);
@@ -14,9 +14,35 @@ export default function useStories(userId) {
     setLoading(false);
   };
 
+  const toggleStoryFavourite = async (story) => {
+    // Optimistic update - update UI immediately
+    setStories(prev => prev.map(s => 
+      s.id === story.id ? { ...s, isFavourite: !s.isFavourite } : s
+    ));
+    
+    try {
+      // Update backend
+      await toggleFavourite(story, userId);
+    } catch (error) {
+      // Revert on error
+      setStories(prev => prev.map(s => 
+        s.id === story.id ? { ...s, isFavourite: !s.isFavourite } : s
+      ));
+      throw error;
+    }
+  };
+
   useEffect(() => {
     if (userId) fetchStories(userId);
   }, [userId]);
 
-  return { stories, loading, fetchStories, addStory, updateStory, deleteStory };
+  return { 
+    stories, 
+    loading, 
+    fetchStories, 
+    addStory, 
+    updateStory, 
+    deleteStory, 
+    toggleStoryFavourite 
+  };
 }

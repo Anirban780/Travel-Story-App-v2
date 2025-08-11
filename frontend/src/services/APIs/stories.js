@@ -1,8 +1,9 @@
 import { getIdToken } from "../auth"; // path to your token util
+import { getBackendUrl } from "../backend";
 
-const API_BASE = import.meta.env.VITE_BACKEND_PROD_URL || import.meta.env.VITE_BACKEND_URL;
+const API_BASE = await getBackendUrl();
 
-export const addStory = async (story) => {
+export const addStory = async (story, userId) => {
   const token = await getIdToken();
   const res = await fetch(`${API_BASE}/stories/add`, {
     method: "POST",
@@ -10,7 +11,7 @@ export const addStory = async (story) => {
       "Authorization": `Bearer ${token}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ story }),
+    body: JSON.stringify({ story, userId }),
   });
 
   if (!res.ok) throw new Error("Failed to add story");
@@ -29,7 +30,7 @@ export const getStories = async (userId) => {
   return await res.json();
 };
 
-export const updateStory = async (storyId, updatedData) => {
+export const updateStory = async (storyId, updatedData, userId) => {
   const token = await getIdToken();
   const res = await fetch(`${API_BASE}/stories/${storyId}`, {
     method: "PUT",
@@ -37,14 +38,14 @@ export const updateStory = async (storyId, updatedData) => {
       "Authorization": `Bearer ${token}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ updatedData }),
+    body: JSON.stringify({ updatedData, userId }),
   });
 
   if (!res.ok) throw new Error("Failed to update story");
   return await res.json();
 };
 
-export const deleteStory = async (storyId, storyTitle = "Untitled") => {
+export const deleteStory = async (storyId, storyTitle = "Untitled", userId) => {
   const token = await getIdToken();
   const res = await fetch(`${API_BASE}/stories/${storyId}`, {
     method: "DELETE",
@@ -52,7 +53,7 @@ export const deleteStory = async (storyId, storyTitle = "Untitled") => {
       "Authorization": `Bearer ${token}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ storyTitle }),
+    body: JSON.stringify({ storyTitle, userId }),
   });
 
   if (!res.ok) throw new Error("Failed to delete story");
@@ -60,9 +61,9 @@ export const deleteStory = async (storyId, storyTitle = "Untitled") => {
 };
 
 
-export const toggleFavourite = async (story) => {
+export const toggleFavourite = async (story, userId) => {
   const token = await getIdToken();
-
+  const API_BASE = await getBackendUrl();
   const res = await fetch(`${API_BASE}/stories/favourite/${story.id}`, {
     method: "PUT",
     headers: {
@@ -70,7 +71,7 @@ export const toggleFavourite = async (story) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      userId: story.userId,               // or use req.user.uid in backend
+      userId: userId,               // or use req.user.uid in backend
       isFavourite: !story.isFavourite,    // toggled value
       title: story.title || "Untitled",   // optional
     }),

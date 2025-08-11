@@ -20,8 +20,20 @@ const AddEditTravelStory = ({
   const [loading, setLoading] = useState(false);
 
   const handleAddOrUpdateClick = async () => {
-    if (!title) { setError("Please enter the title"); return; }
-    if (!story) { setError("Please enter the story"); return; }
+    // Client-side form validation
+    if (!title) { 
+      const msg = "Please enter the title";
+      setError(msg);
+      toast.error(msg);
+      return;
+    }
+    if (!story) { 
+      const msg = "Please enter the story";
+      setError(msg);
+      toast.error(msg);
+      return;
+    }
+
     setError("");
     setLoading(true);
 
@@ -29,8 +41,10 @@ const AddEditTravelStory = ({
     if (storyImg && typeof storyImg === "object") {
       try {
         imageUrl = await uploadImage(storyImg);
-      } catch {
-        setError("Image upload failed");
+      } catch (err) {
+        const msg = "Image upload failed. Please try again.";
+        setError(msg, err);
+        toast.error(msg);
         setLoading(false);
         return;
       }
@@ -49,20 +63,25 @@ const AddEditTravelStory = ({
     try {
       if (type === "add") {
         await addStory(storyData, userId);
-        toast.success("Story Added Successfully");
-
+        toast.success("Story added successfully");
       } else {
         await updateStory(storyInfo.id, storyData, userId);
-        toast.success("Story Updated Successfully");
+        toast.success("Story updated successfully");
       }
 
-      await fetchStories(); // Keep this as fallback
+      // Always refetch so UI stays in sync
+      await fetchStories();
       onClose();
     } catch (err) {
-      setError("Failed to save story. Please try again.", err);
-      console.error(err);
+      // Capture backend error message if available
+      const backendMsg = err?.response?.data?.error || err.message || "An unknown error occurred";
+      const msg = `Failed to save story: ${backendMsg}`;
+      setError(msg);
+      toast.error(msg);
+      console.error("Save story error:", err);
+    } finally {
+      setLoading(false);
     }
-
   };
 
   return (
@@ -71,9 +90,7 @@ const AddEditTravelStory = ({
         <h5 className='text-xl font-medium text-slate-700'>
           {type === "add" ? "Add Story" : "Update Story"}
         </h5>
-
-        <button className='' onClick={onClose}>✕</button>
-
+        <button onClick={onClose}>✕</button>
       </div>
 
       <AddPost
@@ -85,10 +102,15 @@ const AddEditTravelStory = ({
         error={error}
       />
 
-      <button className='btn-primary mt-4 w-full' onClick={handleAddOrUpdateClick} disabled={loading}>
-        {loading ? (type === "add" ? "Adding..." : "Updating...") : (type === "add" ? "Add Story" : "Update Story")}
+      <button
+        className='btn-primary mt-4 w-full'
+        onClick={handleAddOrUpdateClick}
+        disabled={loading}
+      >
+        {loading 
+          ? (type === "add" ? "Adding..." : "Updating...") 
+          : (type === "add" ? "Add Story" : "Update Story")}
       </button>
-
     </div>
   );
 };
