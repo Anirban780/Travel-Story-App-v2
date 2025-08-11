@@ -11,9 +11,11 @@ const ViewTravelStory = ({ storyInfo, onClose, onEditClick, onDeleteClick }) => 
 
     return (
         <div className="relative max-w-xl mx-auto bg-white rounded-lg shadow-lg p-6">
-            <button className="absolute top-2 right-2 text-2xl text-gray-500 hover:text-red-500" onClick={onClose}>
-                <IoClose />
-            </button>
+            <div className="flex justify-end">
+                <button className="close-button" onClick={onClose}>
+                    <IoClose />
+                </button>
+            </div>
             <div className="flex flex-col items-center">
                 <img
                     src={imageUrl}

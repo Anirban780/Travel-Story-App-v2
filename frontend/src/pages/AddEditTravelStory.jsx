@@ -3,6 +3,7 @@ import { uploadImage } from '../services/cloudinary';
 import { addStory, updateStory } from '../services/APIs/stories';
 import { toast } from 'react-toastify';
 import AddPost from '../components/AddPost';
+import { IoClose } from 'react-icons/io5';
 
 const AddEditTravelStory = ({
   type,
@@ -90,7 +91,9 @@ const AddEditTravelStory = ({
         <h5 className='text-xl font-medium text-slate-700'>
           {type === "add" ? "Add Story" : "Update Story"}
         </h5>
-        <button onClick={onClose}>✕</button>
+        <button onClick={onClose} className='close-button'>
+          <IoClose />
+        </button>
       </div>
 
       <AddPost

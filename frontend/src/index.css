@@ -442,6 +442,29 @@ html {
   letter-spacing: 0.025em;
 }
 
+.close-button {
+  background-color: transparent;
+  border: none;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #555;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.close-button:hover {
+  color: #e53e3e; /* a red-ish hover color */
+  transform: scale(1.1);
+}
+
+.close-button:focus {
+  outline: 2px solid #3182ce; /* blue focus ring */
+  outline-offset: 2px;
+}
+
+
 .btn-small {
   @apply flex items-center gap-1 text-xs font-medium bg-[var(--color-primary-50)] text-[var(--color-primary-500)] border border-[var(--color-primary-100)] hover:bg-[var(--color-primary-500)] hover:text-white rounded px-3 py-[3px];
 }

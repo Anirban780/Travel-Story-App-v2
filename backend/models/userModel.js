@@ -36,13 +36,11 @@ const addUserActivity = async (userId, { type, storyId, storyTitle }) => {
 };
 
 const getRecentActivities = async (userId) => {
-  const q = query(
-    collection(db, "users", userId, "activity"),
-    orderBy("createdAt", "desc"),
-    limit(10)
-  );
-
-  const snapshot = await getDocs(q);
+  const activityRef = db.collection("users").doc(userId).collection("activity");
+  const snapshot = await activityRef
+    .orderBy("createdAt", "desc")
+    .limit(10)
+    .get();
 
   return snapshot.docs.map(doc => {
     const data = doc.data();
@@ -50,11 +48,12 @@ const getRecentActivities = async (userId) => {
       id: doc.id,
       ...data,
       createdAt: data.createdAt
-        ? data.createdAt.toDate().toISOString() // <- unambiguous UTC instant
+        ? data.createdAt.toDate().toISOString()
         : null
     };
   });
 };
+
 
 module.exports = {
   createUserIfNotExists,
