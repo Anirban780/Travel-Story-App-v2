@@ -1,17 +1,19 @@
 import React, { useState } from "react";
-import { MdExplore, MdSearch } from "react-icons/md";
+import { MdSearch } from "react-icons/md";
 import ProfileDropdown from "./ProfileDropdown";
 
 const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  
+
   return (
     <div className='bg-white/95 backdrop-blur-md flex items-center justify-between px-6 py-4 shadow-lg sticky top-0 z-50 border-b border-cyan-100'>
       <div className='flex items-center gap-4'>
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full flex items-center justify-center">
-            <MdExplore className="text-white text-xl" />
-          </div>
+          <img
+            src='/travel-icon.svg'
+            alt="Website Logo"
+            className='w-10 h-10'
+          />
           <div>
             <h2 className='text-xl font-bold bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent'>
               TravelStory
@@ -35,7 +37,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      
+
       <ProfileDropdown />
     </div>
   );

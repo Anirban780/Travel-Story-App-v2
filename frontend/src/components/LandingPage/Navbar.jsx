@@ -1,5 +1,4 @@
 import React from 'react'
-import { MdTravelExplore } from 'react-icons/md'
 import { checkCurrentUser } from '../../services/auth'
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
@@ -25,9 +24,11 @@ const Navbar = () => {
                 <div className="container mx-auto px-6 py-4">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full flex items-center justify-center">
-                                <MdTravelExplore className="text-white text-xl" />
-                            </div>
+                            <img 
+                                src='/travel-icon.svg'
+                                alt="Website Logo"
+                                className='w-10 h-10'
+                            />
                             <h1 className="text-2xl font-bold bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">
                                 TravelStory
                             </h1>
